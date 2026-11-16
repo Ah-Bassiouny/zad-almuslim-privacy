@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>زاد المسلم — صلاة وقرآن وأذكار</title>
+<meta name="description" content="المصحف كاملًا، مواقيت الصلاة والأذان، والأذكار بالصوت. بلا إعلانات ولا حساب.">
+<meta property="og:title" content="زاد المسلم — صلاة وقرآن وأذكار">
+<meta property="og:description" content="المصحف كاملًا، مواقيت الصلاة والأذان، والأذكار بالصوت. بلا إعلانات ولا حساب.">
+<meta property="og:type" content="website">
+<!--
+  The page behind the app's shared links (src/lib/links.ts). It opens the app
+  when it is installed and otherwise offers the store for the visitor's phone.
+  "?open=surah/2/255" is passed on to the app, which opens that screen.
+  Published as /app/ on the privacy-policy site; keep the two copies the same.
+-->
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+    font: 17px/1.7 system-ui, "Segoe UI", Tahoma, sans-serif; color: #fff;
+    background: linear-gradient(160deg, #11695C 0%, #0B4A41 50%, #093A3F 100%); }
+  main { width: 100%; max-width: 420px; text-align: center; }
+  .icon { width: 96px; height: 96px; border-radius: 24px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;
+    background: #0B4A41; border: 2px solid #E3C06C; box-shadow: 0 12px 30px rgba(0,0,0,0.35); color: #fff; font-size: 40px; font-weight: 700; }
+  h1 { margin: 0; font-size: 30px; }
+  .sub { margin: 4px 0 28px; color: #E3C06C; font-weight: 600; }
+  a.btn { display: block; margin: 12px 0; padding: 14px 18px; border-radius: 16px; text-decoration: none; font-weight: 700; font-size: 18px; }
+  .primary { background: #E3C06C; color: #0B4A41; }
+  .store { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+  .note { margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.72); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="icon" aria-hidden="true">زاد</div>
+  <h1>زاد المسلم</h1>
+  <p class="sub">صلاة وقرآن وأذكار</p>
+
+  <a class="btn primary" id="open" href="zadalmuslim://">افتح في التطبيق</a>
+  <a class="btn store" id="play" href="https://play.google.com/store/apps/details?id=com.abassiouny.zadalmuslim">حمّله من Google Play</a>
+  <a class="btn store" id="appstore" href="#" hidden>حمّله من App Store</a>
+
+  <p class="note" id="note">إن لم يكن التطبيق مثبّتًا على جهازك، حمّله من المتجر ثم افتح الرابط مرة أخرى.</p>
+</main>
+<script>
+  (function () {
+    // Set once the app is live on the App Store: the number in its App Store link (App Store Connect > App Information > Apple ID).
+    var APP_STORE_ID = "";
+    var PACKAGE = "com.abassiouny.zadalmuslim";
+    var PLAY = "https://play.google.com/store/apps/details?id=" + PACKAGE;
+
+    // Only plain paths are passed on, e.g. "surah/2/255" or "page/293".
+    var open = new URLSearchParams(location.search).get("open") || "";
+    if (!/^[a-z0-9\/_-]*$/i.test(open)) open = "";
+
+    var ua = navigator.userAgent;
+    var android = /Android/i.test(ua);
+    var ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    var openBtn = document.getElementById("open");
+    var play = document.getElementById("play");
+    var appStore = document.getElementById("appstore");
+
+    if (APP_STORE_ID) {
+      appStore.href = "https://apps.apple.com/app/id" + APP_STORE_ID;
+      appStore.hidden = false;
+    }
+
+    if (android) {
+      // Chrome opens the app if it is installed, and Google Play if not.
+      openBtn.href = "intent://" + open + "#Intent;scheme=zadalmuslim;package=" + PACKAGE + ";S.browser_fallback_url=" + encodeURIComponent(PLAY) + ";end";
+      appStore.hidden = true;
+      location.replace(openBtn.href);
+    } else {
+      openBtn.href = "zadalmuslim://" + open;
+      if (ios) play.hidden = true;
+      // On a computer there is no app to open: only the stores are useful.
+      if (!ios) openBtn.hidden = true;
+      if (ios && !APP_STORE_ID) document.getElementById("note").textContent = "قريبًا على App Store. إن كان التطبيق مثبّتًا، اضغط «افتح في التطبيق».";
+    }
+  })();
+</script>
+</body>
+</html>
